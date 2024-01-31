@@ -57,12 +57,14 @@ app.post('/lab/simula-comercio/respuesta-pago', (req, res) => {
   const { JWT } = body;
   const decoded = jwtDecode(JWT);
   console.log(decoded);
-  const payment = new Payment(decoded);
-  payment.save((err, payment) => {
-    if (err) return console.error(err);
-    console.log('Payment saved');
-  });
-  res.status(200).send('OK');
+  try {
+    const payment = new Payment(decoded);
+    payment.save();
+    res.status(200).send('OK');
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error');
+  }
 
 } );
 
